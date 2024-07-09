@@ -6,7 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<ForkliftDirectoryDbContext>(opts => opts.UseNpgsql());
+builder.Services.AddDbContext<ForkliftDirectoryDbContext>(opts => opts.UseNpgsql(builder.Configuration["ConnectionStrings:ForkliftConnection"]));
+
+using var scope = builder.Services.BuildServiceProvider().CreateScope();
+var dbContext = scope.ServiceProvider.GetService<ForkliftDirectoryDbContext>();
+dbContext.Database.Migrate();
 
 var app = builder.Build();
 

@@ -1,47 +1,68 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <button>Профиль</button>
   </header>
-
   <main>
-    <TheWelcome />
+    <aside>
+      <p>Пользователи</p>
+      <p>Уведомления и напоминания</p>
+      <p>Настройки АИС ОГПА</p>
+      <p>Справочник погрузчиков</p>
+      <p>Резервное копирование и восстановление</p>
+      <p>Справочники</p>
+    </aside>
+    <Directory></Directory>
   </main>
 </template>
 
+<script>
+  import Directory from './components/directory-task-bar.vue'
+
+  export default {
+    components: {
+      Directory
+    }
+  }
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
   header {
+    background-color: rgb(189, 21, 21);
+    height: 60px;
+    width: 100%;
+    border-radius: 10px;
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+    align-items: center;
+    justify-content: end;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+header button {
+  background-color: #FFF;
+  font-weight: bold;
+  height: 30px;
+  width: 120px;
+  border-radius: 10px;
+  margin-right: 10px;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+aside {
+  background-color: rgb(189, 21, 21);
+  height: 90vh;
+  width: 15%;
+  margin: 12px 12px 0 0;
+  background-color: rgb(233, 230, 230);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+aside p {
+  margin-left: 10%;
+}
+
+main {
+  display: flex;
 }
 </style>
