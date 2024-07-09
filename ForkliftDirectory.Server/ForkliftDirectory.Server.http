@@ -1,0 +1,6 @@
+@ForkliftDirectory.Server_HostAddress = http://localhost:5052
+
+GET {{ForkliftDirectory.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
