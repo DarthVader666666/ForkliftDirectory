@@ -9,13 +9,18 @@
             <button>Изменить</button>
         </div>
         <div className="task-bar">
-            <ButtonsBar :addRow="addRowForklift"></ButtonsBar>
+            <ButtonsBar 
+                :addRow="addRowForklift" 
+                :modifyRow="modifySelectedForklift"
+                >
+            </ButtonsBar>
         </div>        
         <div class="tables">
             <ForkliftTable 
                 :extraRow="extraRowForForklifts" 
                 :forklifts="forklifts"
                 :selectRow="selectForkliftRow"
+                :shouldModify="shouldModifyForklift"
                 ></ForkliftTable>
             <Idle></Idle>
         </div>        
@@ -78,16 +83,33 @@ methods: {
     },
 
     selectForkliftRow(id) {
-        if(this.selectedForkliftRow) {
+        if(this.selectedForkliftRow.forkliftId && this.selectedForkliftRow.rowId) {
             const elementId = `${this.selectedForkliftRow.forkliftId} ${this.selectedForkliftRow.rowId}`;
             document.getElementById(elementId).style.setProperty('background-color', 'white');
         }
         
         const stringArray = id.split(" ");
-        this.selectedForkliftRow = { forkliftId:stringArray[0], rowId:stringArray[1]}
+        this.selectedForkliftRow = { forkliftId:stringArray[0], rowId:stringArray[1], modify:false}
         document.getElementById(id).style.setProperty('background-color', 'lightgray');
+    },
 
-        console.log(this.selectedForkliftRow)
+    modifySelectedForklift() {
+        const id = this.selectedForkliftRow['forkliftId'];
+
+        if(id) {
+            this.forklifts.forEach(x => {
+                if(Number(x.forkliftId) === Number(id)) {
+                    x.modify = true
+                }
+                else {
+                    x.modify = false
+                }
+            });
+        }
+    },
+
+    shouldModifyForklift(forkliftId) {
+        return this.selectedForkliftRow.forkliftId === forkliftId && this.selectedForkliftRow.modify
     }
 },
 
@@ -97,7 +119,7 @@ data() {
             forklifts:[],
             extraRowForForklifts:false,
             extraRowForIdle:false,
-            selectedForkliftRow:null
+            selectedForkliftRow: { forkliftId:null ,rowId:null, modify:false }
         }
     }
 }
@@ -131,6 +153,10 @@ data() {
 
     tr {
         max-height: 10px;
+    }
+
+    tr:hover {
+        cursor: pointer;
     }
 
     th {

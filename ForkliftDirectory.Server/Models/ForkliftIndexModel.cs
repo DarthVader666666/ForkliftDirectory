@@ -11,5 +11,6 @@ namespace ForkliftDirectory.Server.Models
         public bool Active { get; set; } = false;
         public string? UserName { get; set; }
         public DateTime? LastEndTime { get; set; }
+        public bool Modify { get; set; } = false;
     }
 }

@@ -2,7 +2,7 @@
     <div className="buttons">
         <div>
             <button @click="addRow()">Добавить</button>
-            <button>Изменить</button>
+            <button @click="modifyRow()">Изменить</button>
             <button>Удалить</button>
         </div>
         <div>
@@ -23,6 +23,9 @@ components: {
 
 props: {
     addRow: {
+        type:Function
+    },
+    modifyRow: {
         type:Function
     }
 },
