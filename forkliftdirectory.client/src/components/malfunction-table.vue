@@ -1,5 +1,5 @@
 <template>
-    <div className="container">
+    <div className="malfunction-container">
         <table>
             <thead>
                 <th>
@@ -23,12 +23,12 @@
             </thead>
             <tbody>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>asdas</td>
+                    <td>asd</td>
+                    <td>asdasd</td>
+                    <td>asdasd</td>
+                    <td>asdasd</td>
+                    <td>asdasd</td>
                 </tr>
             </tbody>
         </table>
@@ -39,18 +39,8 @@
 </script>
 
 <style>
-    table {
-        background-color: #FFF;
-        height: 70%;
-    }
-
-    th {
-        border: solid 1px black;
-        max-width: 180px;
-        padding: 4px;
-    }
-
-    td {
-        border: solid 1px black;
+    .malfunction-container {
+        max-height: 90vh;
+        margin-top: 12px;
     }
 </style>

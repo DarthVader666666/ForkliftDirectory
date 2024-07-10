@@ -9,23 +9,26 @@
             <button>Изменить</button>
         </div>
         <div className="task-bar">
-            <button>Добавить</button>
-            <button>Изменить</button>
-            <button>Удалить</button>
-            <button>Сохранить</button>
-            <button>Отменить</button>
-        </div>
-        <MalfunctionTable></MalfunctionTable>
+            <ButtonsBar></ButtonsBar>
+        </div>        
+        <div class="tables">
+            <MalfunctionTable></MalfunctionTable>
+            <Idle></Idle>
+        </div>        
     </div>
     
 </template>
 
 <script>
 import MalfunctionTable from './malfunction-table.vue'
+import ButtonsBar from './buttons-bar.vue'
+import Idle from './idle-table.vue'
 
 export default {
 components: {
-    MalfunctionTable
+    MalfunctionTable,
+    ButtonsBar,
+    Idle
 },
 
 props: {
@@ -59,14 +62,37 @@ return {
         padding: 4px;
     }
 
-    .container button {
-        width: 120px;
-        height: 23px;
+    table {
+        background-color: #FFF;
+        border-collapse: collapse;
+        border: solid 1px gray;
+        height: 70%;
+    }
+
+    tr {
+        max-height: 10px;
+    }
+
+    th {
+        border: solid 1px lightgray;
+        padding: 4px;
+    }
+
+    td {
+        border: solid 1px lightgray;
+    }
+
+    button {
         margin-left: 10px;
         border-radius: 6px;
         border: 1px;
         color: #FFF;
         background-color: rgb(189, 21, 21);
+    }
+
+    .task-bar button {
+        width: 120px;
+        height: 28px;        
     }
 
     .task-bar {
@@ -82,5 +108,10 @@ return {
 
     a:hover, button:hover {
         cursor: pointer;
+    }
+
+    .tables {
+        display: flex;
+        gap: 1rem;
     }
 </style>

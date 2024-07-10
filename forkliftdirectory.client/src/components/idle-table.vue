@@ -1,0 +1,71 @@
+<template>
+    <div className="idle-container">
+        <label>Простои по погрузчику</label>        
+        <ButtonsBar></ButtonsBar>
+        <table>
+            <thead>
+                <th>
+                    Код записи
+                </th>
+                <th>
+                    Начало
+                </th>
+                <th>
+                    Окончание
+                </th>
+                <th>
+                    Время простоя
+                </th>
+                <th>
+                    Причина
+                </th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>asdas</td>
+                    <td>asd</td>
+                    <td>asdasd</td>
+                    <td>asdasd</td>
+                    <td>asdasd</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+
+<script>
+    import ButtonsBar from './buttons-bar.vue'
+
+    export default {
+        components: {
+            ButtonsBar
+        }
+    }
+</script>
+
+<style>
+    .idle-container {
+        max-height: 90vh;
+        margin-top: 12px;
+    }
+
+    .idle-container table {
+        height: 70%;
+        width:100%;
+    }
+
+    label {
+        font-size: large;
+        font-weight: bold;
+    }
+
+    .idle-container button {
+        min-width: 100px;
+        height: 28px;
+        margin-left: 10px;
+        border-radius: 6px;
+        border: 1px;
+        color: #FFF;
+        background-color: rgb(189, 21, 21);
+    }
+</style>
