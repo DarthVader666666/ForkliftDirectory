@@ -22,7 +22,7 @@
                 </th>
             </thead>
             <tbody>
-                <tr v-for="(forklift, index) in initialForklifts" :key="index">
+                <tr v-for="(forklift, index) in forklifts" :key="index">
                     <td>{{forklift.forkliftId}}</td>
                     <td>{{forklift.model}}</td>
                     <td>{{forklift.number}}</td>
@@ -35,39 +35,23 @@
     </div>
 </template>
 
-<script setup>
-    import { onMounted } from 'vue';
-    import { ref } from 'vue'
-
-    let initialForklifts = ref([]);
-
-    onMounted(async () => {initialForklifts.value = await getForklifts()});
-
-    function getForklifts() {
-        return fetch(
-            'https://localhost:7139/Forklifts/GetList/',
-            {
-              method: 'GET',              
-              headers: {
-                'Content-Type' : 'application/json',
-              }
-            }
-          ).then(response => response.json()).then(data => data);
-    }
-</script>
-
 <script>
-
+    
 export default {
+    props: {
+        forklifts: {
+            type: Array,
+            required: true
+        }
+    },
+
     data() {
         return {
-            forklift: []
         }
     },
 
     methods: {
-
-  }
+    }
 }
 
 

@@ -3,8 +3,8 @@
         <h3>Справочник погрузчиков</h3>
         <div className="task-bar">
             <label>Номер погрузчика</label>
-            <input @input="event => onSearchChange(event.target.value)" type="text"/>
-            <button @click="onSearchStart()">🔍 Искать</button>
+            <input @input="event => onSearchInput(event.target.value)" type="text"/>
+            <button @click="findByNumber(this.searchNumber)">🔍 Искать</button>
             <a><span>❌</span>Очистить фильтр</a>
             <button>Изменить</button>
         </div>
@@ -12,7 +12,7 @@
             <ButtonsBar></ButtonsBar>
         </div>        
         <div class="tables">
-            <MalfunctionTable></MalfunctionTable>
+            <ForkliftTable :forklifts="forklifts"></ForkliftTable>
             <Idle></Idle>
         </div>        
     </div>
@@ -20,13 +20,18 @@
 </template>
 
 <script>
-import MalfunctionTable from './malfunction-table.vue'
+import ForkliftTable from './forklift-table.vue'
 import ButtonsBar from './buttons-bar.vue'
 import Idle from './idle-table.vue'
 
 export default {
+
+async created() {
+    this.forklifts = await this.getForklifts();
+},
+
 components: {
-    MalfunctionTable,
+    ForkliftTable,
     ButtonsBar,
     Idle
 },
@@ -35,14 +40,14 @@ props: {
 },
 
 methods: {
-    onSearchChange(value)
-    {
+    onSearchInput(value) {
         this.searchNumber = value;
     },
-    onSearchStart()
+
+    async findByNumber(searchNumber)
     {
-        this.searchResult = fetch(
-            'https://localhost:7139/Forklifts/Find/' + this.searchNumber,
+        this.forklifts = await fetch(
+            'https://localhost:7139/Forklifts/Find/' + searchNumber,
             {
               method: 'GET',              
               headers: {
@@ -50,13 +55,25 @@ methods: {
               }
             }
           ).then(response => response.json()).then(data => data);
+    },
+
+    getForklifts() {
+            return fetch(
+                'https://localhost:7139/Forklifts/GetList/',
+                {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type' : 'application/json',
+                  }
+                }
+              ).then(response => response.json()).then(data => data);
     }
 },
 
 data() {
     return {
             searchNumber:'',
-            searchResult:[]
+            forklifts:[]
         }
     }
 }
