@@ -24,6 +24,7 @@
             <Idle :malfunctions="malfunctions"></Idle>
         </div>        
     </div>
+    <DialogModal></DialogModal>
     
 </template>
 
@@ -31,6 +32,7 @@
 import ForkliftTable from './forklift-table.vue'
 import ButtonsBar from './buttons-bar.vue'
 import Idle from './idle-table.vue'
+import DialogModal from './dialog-modal.vue'
 
 export default {
 
@@ -41,7 +43,8 @@ async created() {
 components: {
     ForkliftTable,
     ButtonsBar,
-    Idle
+    Idle,
+    DialogModal
 },
 
 props: {
