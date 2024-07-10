@@ -22,20 +22,55 @@
                 </th>
             </thead>
             <tbody>
-                <tr>
-                    <td>asdas</td>
-                    <td>asd</td>
-                    <td>asdasd</td>
-                    <td>asdasd</td>
-                    <td>asdasd</td>
-                    <td>asdasd</td>
+                <tr v-for="(forklift, index) in initialForklifts" :key="index">
+                    <td>{{forklift.forkliftId}}</td>
+                    <td>{{forklift.model}}</td>
+                    <td>{{forklift.number}}</td>
+                    <td>{{ forklift.active }}</td>
+                    <td></td>
+                    <td>{{ forklift.userName }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </template>
 
+<script setup>
+    import { onMounted } from 'vue';
+    import { ref } from 'vue'
+
+    let initialForklifts = ref([]);
+
+    onMounted(async () => {initialForklifts.value = await getForklifts()});
+
+    function getForklifts() {
+        return fetch(
+            'https://localhost:7139/Forklifts/GetList/',
+            {
+              method: 'GET',              
+              headers: {
+                'Content-Type' : 'application/json',
+              }
+            }
+          ).then(response => response.json()).then(data => data);
+    }
+</script>
+
 <script>
+
+export default {
+    data() {
+        return {
+            forklift: []
+        }
+    },
+
+    methods: {
+
+  }
+}
+
+
 </script>
 
 <style>

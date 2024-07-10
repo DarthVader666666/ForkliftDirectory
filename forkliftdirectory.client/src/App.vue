@@ -1,6 +1,6 @@
 <template>
   <header>
-    <button>Профиль</button>
+    <button className="profile-button">Профиль</button>
   </header>
   <main>
     <aside>
@@ -65,5 +65,10 @@ aside p {
 
 main {
   display: flex;
+}
+
+.profile-button{
+  color:black;
+  font-weight: bold;
 }
 </style>

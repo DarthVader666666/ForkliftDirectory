@@ -3,8 +3,8 @@
         <h3>Справочник погрузчиков</h3>
         <div className="task-bar">
             <label>Номер погрузчика</label>
-            <input type="text"/>
-            <button>🔍 Искать</button>
+            <input @input="event => onSearchChange(event.target.value)" type="text"/>
+            <button @click="onSearchStart()">🔍 Искать</button>
             <a><span>❌</span>Очистить фильтр</a>
             <button>Изменить</button>
         </div>
@@ -35,11 +35,30 @@ props: {
 },
 
 methods: {
-},
-data() {
-return {
+    onSearchChange(value)
+    {
+        this.searchNumber = value;
+    },
+    onSearchStart()
+    {
+        this.searchResult = fetch(
+            'https://localhost:7139/Forklifts/Find/' + this.searchNumber,
+            {
+              method: 'GET',              
+              headers: {
+                'Content-Type' : 'application/json',
+              }
+            }
+          ).then(response => response.json()).then(data => data);
     }
-}
+},
+
+data() {
+    return {
+            searchNumber:'',
+            searchResult:[]
+        }
+    }
 }
 </script>
     
