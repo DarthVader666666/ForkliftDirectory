@@ -43,6 +43,11 @@ namespace ForkliftDirectory.Server.Services
 
         public Task<IEnumerable<Forklift?>> GetListByAsync(object? criteria)
         {
+            if (criteria == null)
+            {
+                return GetListAsync();
+            }
+
             var forklifts = _dbContext.Forklifts.Include(x => x.User).Include(x => x.Malfunctions).AsEnumerable();
             var result = forklifts.Where(x => x.Number!.Contains((string?)criteria, StringComparison.InvariantCultureIgnoreCase));
 

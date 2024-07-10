@@ -1,5 +1,5 @@
 <template>
-    <div className="malfunction-container">
+    <div className="forklift-container">
         <table>
             <thead>
                 <th>
@@ -22,13 +22,22 @@
                 </th>
             </thead>
             <tbody>
-                <tr v-for="(forklift, index) in forklifts" :key="index">
+                <tr v-for="(forklift, index) in forklifts" :key="index" :id="`${forklift.forkliftId} ${index}`" 
+                @click="selectRow(`${forklift.forkliftId} ${index}`)">
                     <td>{{forklift.forkliftId}}</td>
                     <td>{{forklift.model}}</td>
                     <td>{{forklift.number}}</td>
                     <td>{{ forklift.active }}</td>
                     <td></td>
                     <td>{{ forklift.userName }}</td>
+                </tr>
+                <tr v-if="extraRow">
+                    <td></td>
+                    <td><input type="text" placeholder="Марка"/></td>
+                    <td><input type="text" placeholder="Номер"/></td>
+                    <td><input type="checkbox"/></td>
+                    <td><input type="date"/></td>
+                    <td><input type="text" placeholder="Имя"/></td>
                 </tr>
             </tbody>
         </table>
@@ -42,6 +51,12 @@ export default {
         forklifts: {
             type: Array,
             required: true
+        },
+        extraRow: {
+            type:Boolean
+        },
+        selectRow: {
+            type:Function
         }
     },
 
@@ -54,11 +69,10 @@ export default {
     }
 }
 
-
 </script>
 
 <style>
-    .malfunction-container {
+    .forklift-container {
         max-height: 90vh;
         margin-top: 12px;
     }

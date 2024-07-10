@@ -1,7 +1,7 @@
 <template>
     <div className="buttons">
         <div>
-            <button>Добавить</button>
+            <button @click="addRow()">Добавить</button>
             <button>Изменить</button>
             <button>Удалить</button>
         </div>
@@ -13,7 +13,28 @@
 </template>
 
 <script>
+export default {
 
+async created() {
+},
+
+components: {
+},
+
+props: {
+    addRow: {
+        type:Function
+    }
+},
+
+methods: {
+},
+
+data() {
+    return {
+        }
+    }
+}
 </script>
     
 <style>

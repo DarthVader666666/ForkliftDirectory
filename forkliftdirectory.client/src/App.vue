@@ -49,7 +49,7 @@ header button {
 aside {
   background-color: rgb(189, 21, 21);
   height: 90vh;
-  width: 15%;
+  width: 10%;
   margin: 12px 12px 0 0;
   background-color: rgb(233, 230, 230);
   border-radius: 10px;

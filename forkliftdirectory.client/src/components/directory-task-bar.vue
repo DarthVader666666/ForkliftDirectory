@@ -9,10 +9,14 @@
             <button>Изменить</button>
         </div>
         <div className="task-bar">
-            <ButtonsBar></ButtonsBar>
+            <ButtonsBar :addRow="addRowForklift"></ButtonsBar>
         </div>        
         <div class="tables">
-            <ForkliftTable :forklifts="forklifts"></ForkliftTable>
+            <ForkliftTable 
+                :extraRow="extraRowForForklifts" 
+                :forklifts="forklifts"
+                :selectRow="selectForkliftRow"
+                ></ForkliftTable>
             <Idle></Idle>
         </div>        
     </div>
@@ -47,7 +51,7 @@ methods: {
     async findByNumber(searchNumber)
     {
         this.forklifts = await fetch(
-            'https://localhost:7139/Forklifts/Find/' + searchNumber,
+            'https://localhost:7139/Forklifts/Find?number=' + searchNumber,
             {
               method: 'GET',              
               headers: {
@@ -67,13 +71,33 @@ methods: {
                   }
                 }
               ).then(response => response.json()).then(data => data);
+    },
+
+    addRowForklift() {
+        this.extraRowForForklifts = true;
+    },
+
+    selectForkliftRow(id) {
+        if(this.selectedForkliftRow) {
+            const elementId = `${this.selectedForkliftRow.forkliftId} ${this.selectedForkliftRow.rowId}`;
+            document.getElementById(elementId).style.setProperty('background-color', 'white');
+        }
+        
+        const stringArray = id.split(" ");
+        this.selectedForkliftRow = { forkliftId:stringArray[0], rowId:stringArray[1]}
+        document.getElementById(id).style.setProperty('background-color', 'lightgray');
+
+        console.log(this.selectedForkliftRow)
     }
 },
 
 data() {
     return {
             searchNumber:'',
-            forklifts:[]
+            forklifts:[],
+            extraRowForForklifts:false,
+            extraRowForIdle:false,
+            selectedForkliftRow:null
         }
     }
 }
@@ -82,7 +106,7 @@ data() {
 <style>
     .container {
         background-color: rgb(233, 230, 230);
-        width: 85%;
+        width: 90%;
         height: 90vh;
         margin: 12px 12px 0 0;
         padding-left: 20px;
