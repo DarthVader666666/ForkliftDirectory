@@ -21,12 +21,12 @@
                 </th>
             </thead>
             <tbody>
-                <tr>
-                    <td>asdas</td>
-                    <td>asd</td>
-                    <td>asdasd</td>
-                    <td>asdasd</td>
-                    <td>asdasd</td>
+                <tr v-for="mal in malfunctions" :key="mal.malfunctionId">
+                    <td>{{mal.malfunctionId}}</td>
+                    <td>{{mal.startTime}}</td>
+                    <td>{{mal.endTime}}</td>
+                    <td>{{mal.timeSpan}}</td>
+                    <td>{{mal.describtion}}</td>
                 </tr>
             </tbody>
         </table>
@@ -39,6 +39,12 @@
     export default {
         components: {
             ButtonsBar
+        },
+
+        props: {
+            malfunctions: {
+                type: Array
+            }
         }
     }
 </script>

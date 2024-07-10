@@ -4,7 +4,7 @@
         <div className="task-bar">
             <label>Номер погрузчика</label>
             <input @input="event => onSearchInput(event.target.value)" type="text"/>
-            <button @click="findByNumber(this.searchNumber)">🔍 Искать</button>
+            <button @click="findForkliftsByNumber(this.searchNumber)">🔍 Искать</button>
             <a><span>❌</span>Очистить фильтр</a>
             <button>Изменить</button>
         </div>
@@ -20,9 +20,8 @@
                 :extraRow="extraRowForForklifts" 
                 :forklifts="forklifts"
                 :selectRow="selectForkliftRow"
-                :shouldModify="shouldModifyForklift"
                 ></ForkliftTable>
-            <Idle></Idle>
+            <Idle :malfunctions="malfunctions"></Idle>
         </div>        
     </div>
     
@@ -53,7 +52,7 @@ methods: {
         this.searchNumber = value;
     },
 
-    async findByNumber(searchNumber)
+    async findForkliftsByNumber(searchNumber)
     {
         this.forklifts = await fetch(
             'https://localhost:7139/Forklifts/Find?number=' + searchNumber,
@@ -78,11 +77,23 @@ methods: {
               ).then(response => response.json()).then(data => data);
     },
 
+    findMalfunctionsByForkliftId() {
+            return fetch(
+                'https://localhost:7139/Malfunctions/Find?forkliftId=' + this.selectedForkliftRow.forkliftId,
+                {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type' : 'application/json',
+                  }
+                }
+              ).then(response => response.json()).then(data => data);
+    },
+
     addRowForklift() {
         this.extraRowForForklifts = true;
     },
 
-    selectForkliftRow(id) {
+    async selectForkliftRow(id) {
         if(this.selectedForkliftRow.forkliftId && this.selectedForkliftRow.rowId) {
             const elementId = `${this.selectedForkliftRow.forkliftId} ${this.selectedForkliftRow.rowId}`;
             document.getElementById(elementId).style.setProperty('background-color', 'white');
@@ -91,6 +102,8 @@ methods: {
         const stringArray = id.split(" ");
         this.selectedForkliftRow = { forkliftId:stringArray[0], rowId:stringArray[1], modify:false}
         document.getElementById(id).style.setProperty('background-color', 'lightgray');
+
+        this.malfunctions = await this.findMalfunctionsByForkliftId()
     },
 
     modifySelectedForklift() {
@@ -106,10 +119,6 @@ methods: {
                 }
             });
         }
-    },
-
-    shouldModifyForklift(forkliftId) {
-        return this.selectedForkliftRow.forkliftId === forkliftId && this.selectedForkliftRow.modify
     }
 },
 
@@ -117,6 +126,7 @@ data() {
     return {
             searchNumber:'',
             forklifts:[],
+            malfunctions:[],
             extraRowForForklifts:false,
             extraRowForIdle:false,
             selectedForkliftRow: { forkliftId:null ,rowId:null, modify:false }

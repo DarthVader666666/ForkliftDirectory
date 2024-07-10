@@ -26,6 +26,7 @@ builder.Services.AddControllers();
 builder.Services.ConfigureAutomapper();
 builder.Services.AddDbContext<ForkliftDirectoryDbContext>(opts => opts.UseNpgsql(builder.Configuration["ConnectionStrings:ForkliftConnection"]));
 builder.Services.AddScoped<IRepository<Forklift>, ForkliftRepository>();
+builder.Services.AddScoped<IRepository<Malfunction>, MalfunctionRepository>();
 
 using var scope = builder.Services.BuildServiceProvider().CreateScope();
 var dbContext = scope.ServiceProvider.GetService<ForkliftDirectoryDbContext>();

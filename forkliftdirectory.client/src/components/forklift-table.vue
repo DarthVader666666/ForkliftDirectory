@@ -36,7 +36,7 @@
                     <td v-if="forklift.modify"><input type="checkbox"/></td>
                     <td v-else>{{ forklift.active }}</td>
                     <td v-if="forklift.modify"><input type="datetime-local"/></td>
-                    <td v-else></td>
+                    <td v-else>{{ forklift.lastEndTime }}</td>
                     <td v-if="forklift.modify"><input type="text" placeholder="Имя"/></td>
                     <td v-else>{{ forklift.userName }}</td>
                 </tr>
@@ -65,9 +65,6 @@ export default {
         },
         selectRow: {
             type:Function
-        },
-        shouldModify: {
-            type:Function
         }
     },
 
@@ -88,5 +85,7 @@ export default {
         max-height: 90vh;
         margin-top: 12px;
     }
-
+    .forklift-container input {
+        max-width:85px;
+    }
 </style>

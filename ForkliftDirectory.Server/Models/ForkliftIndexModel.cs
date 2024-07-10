@@ -10,7 +10,7 @@ namespace ForkliftDirectory.Server.Models
         public int? LiftCapacity { get; set; }
         public bool Active { get; set; } = false;
         public string? UserName { get; set; }
-        public DateTime? LastEndTime { get; set; }
+        public string? LastEndTime { get; set; }
         public bool Modify { get; set; } = false;
     }
 }
