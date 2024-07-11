@@ -44,5 +44,6 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'forklift-directory'
+        slot-name: 'Production'
         publish-profile: ${{ secrets.forklift_directory_F6B9 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
