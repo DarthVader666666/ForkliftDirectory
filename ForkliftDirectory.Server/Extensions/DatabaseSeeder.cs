@@ -4,7 +4,7 @@ namespace ForkliftDirectory.Server.Extensions
 {
     public static class DatabaseSeeder
     {
-        public static async Task SeedDatabase(this ForkliftDirectoryDbContext dbContext)
+        public static void SeedDatabase(this ForkliftDirectoryDbContext dbContext)
         {
             if (dbContext == null)
             {
