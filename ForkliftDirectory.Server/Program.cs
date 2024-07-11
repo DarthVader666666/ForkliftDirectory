@@ -46,7 +46,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var dbContext = services.GetRequiredService<ForkliftDirectoryDbContext>();
 
-    if (app.Environment.EnvironmentName == "Production")
+    if (connectionString == null)
     {
         await dbContext.SeedDatabase();
     }
