@@ -23,15 +23,39 @@ builder.Services.AddCors(opts =>
 
 builder.Services.AddControllers();
 builder.Services.ConfigureAutomapper();
-builder.Services.AddDbContext<ForkliftDirectoryDbContext>(opts => opts.UseNpgsql(builder.Configuration["ConnectionStrings:ForkliftConnection"]));
+
+string? connectionString = builder.Configuration["ConnectionStrings:ForkliftConnection"];
+
+if (connectionString == null)
+{
+    builder.Services.AddDbContext<ForkliftDirectoryDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+}
+else
+{
+    builder.Services.AddDbContext<ForkliftDirectoryDbContext>(opts => opts.UseNpgsql(connectionString));
+}
+
 builder.Services.AddScoped<IRepository<Forklift>, ForkliftRepository>();
 builder.Services.AddScoped<IRepository<Malfunction>, MalfunctionRepository>();
 
-using var scope = builder.Services.BuildServiceProvider().CreateScope();
-var dbContext = scope.ServiceProvider.GetService<ForkliftDirectoryDbContext>();
-dbContext.Database.Migrate();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<ForkliftDirectoryDbContext>();
+
+    if (app.Environment.EnvironmentName == "Production")
+    {
+        await dbContext.SeedDatabase();
+    }
+    else
+    {
+        dbContext.Database.Migrate();
+    }
+}
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

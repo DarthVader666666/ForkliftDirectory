@@ -37,5 +37,6 @@ namespace ForkliftDirectory.Server
 
         public DbSet<Forklift> Forklifts { get; set; }
         public DbSet<Malfunction> Malfunctions { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

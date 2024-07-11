@@ -3,6 +3,7 @@ using System;
 using ForkliftDirectory.Server;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ForkliftDirectory.Server.Migrations
 {
     [DbContext(typeof(ForkliftDirectoryDbContext))]
-    partial class ForkliftDirectoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240711074147_Added_User_Relation")]
+    partial class Added_User_Relation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
