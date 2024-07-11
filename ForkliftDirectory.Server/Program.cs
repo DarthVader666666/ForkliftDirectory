@@ -19,7 +19,6 @@ builder.Services.AddCors(opts =>
 
     opts.AddPolicy("AllowAll", builder => builder
         .AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
 } );
 
 builder.Services.AddControllers();
@@ -36,18 +35,12 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-// app.UseCookiePolicy();
 
 app.UseRouting();
-// app.UseRateLimiter();
-// app.UseRequestLocalization();
 app.UseCors("AllowClient");
 
 app.UseAuthentication();
 app.UseAuthorization();
-// app.UseSession();
-// app.UseResponseCompression();
-// app.UseResponseCaching();
 
 app.MapControllers();
 

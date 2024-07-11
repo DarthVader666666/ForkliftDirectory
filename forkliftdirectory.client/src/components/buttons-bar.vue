@@ -3,11 +3,11 @@
         <div>
             <button @click="addRow()">Добавить</button>
             <button @click="modifyRow()">Изменить</button>
-            <button>Удалить</button>
+            <button @click="openDeleteModal()">Удалить</button>
         </div>
         <div>
-            <button>Сохранить</button>
-            <button>Отменить</button>
+            <button @click="save()">Сохранить</button>
+            <button @click="cancel()">Отменить</button>
         </div>
     </div>    
 </template>
@@ -26,6 +26,15 @@ props: {
         type:Function
     },
     modifyRow: {
+        type:Function
+    },
+    cancel: {
+        type:Function
+    },
+    openDeleteModal: {
+        type:Function
+    },
+    save: {
         type:Function
     }
 },

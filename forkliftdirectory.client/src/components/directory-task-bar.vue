@@ -12,19 +12,21 @@
             <ButtonsBar 
                 :addRow="addRowForklift" 
                 :modifyRow="modifySelectedForklift"
+                :cancel="cancel"
+                :openDeleteModal="openDeleteModal"
                 >
             </ButtonsBar>
         </div>        
         <div class="tables">
             <ForkliftTable 
-                :extraRow="extraRowForForklifts" 
+                :extraRow="extraForklift" 
                 :forklifts="forklifts"
                 :selectRow="selectForkliftRow"
                 ></ForkliftTable>
             <Idle :malfunctions="malfunctions"></Idle>
-        </div>        
+        </div>
     </div>
-    <DialogModal></DialogModal>
+    <DeletegModal :show="shallDelete" :deleteForklift="deleteForklift" :closeDeleteModal="closeDeleteModal"></DeletegModal>
     
 </template>
 
@@ -32,7 +34,7 @@
 import ForkliftTable from './forklift-table.vue'
 import ButtonsBar from './buttons-bar.vue'
 import Idle from './idle-table.vue'
-import DialogModal from './dialog-modal.vue'
+import DeletegModal from './delete-modal.vue'
 
 export default {
 
@@ -44,7 +46,7 @@ components: {
     ForkliftTable,
     ButtonsBar,
     Idle,
-    DialogModal
+    DeletegModal
 },
 
 props: {
@@ -52,6 +54,7 @@ props: {
 
 methods: {
     onSearchInput(value) {
+        this.resetAll();
         this.searchNumber = value;
     },
 
@@ -82,7 +85,7 @@ methods: {
 
     findMalfunctionsByForkliftId() {
             return fetch(
-                'https://localhost:7139/Malfunctions/Find?forkliftId=' + this.selectedForkliftRow.forkliftId,
+                'https://localhost:7139/Malfunctions/Find?forkliftId=' + this.selectedForklift.forkliftId,
                 {
                   method: 'GET',
                   headers: {
@@ -93,24 +96,27 @@ methods: {
     },
 
     addRowForklift() {
-        this.extraRowForForklifts = true;
+        this.forklifts.forEach(x => x.modify = false);
+        this.extraForklift = true;
+        
     },
 
-    async selectForkliftRow(id) {
-        if(this.selectedForkliftRow.forkliftId && this.selectedForkliftRow.rowId) {
-            const elementId = `${this.selectedForkliftRow.forkliftId} ${this.selectedForkliftRow.rowId}`;
+    async selectForkliftRow(forklift) {
+        if(this.selectedForklift && this.selectedForklift.forkliftId && this.selectedForklift.number) {
+            const elementId = `${this.selectedForklift.forkliftId} ${this.selectedForklift.number}`;
             document.getElementById(elementId).style.setProperty('background-color', 'white');
         }
         
-        const stringArray = id.split(" ");
-        this.selectedForkliftRow = { forkliftId:stringArray[0], rowId:stringArray[1], modify:false}
+        this.selectedForklift = forklift;
+        const id = `${this.selectedForklift.forkliftId} ${this.selectedForklift.number}`;
         document.getElementById(id).style.setProperty('background-color', 'lightgray');
 
         this.malfunctions = await this.findMalfunctionsByForkliftId()
     },
 
     modifySelectedForklift() {
-        const id = this.selectedForkliftRow['forkliftId'];
+        this.extraForklift = false;
+        const id = this.selectedForklift['forkliftId'];
 
         if(id) {
             this.forklifts.forEach(x => {
@@ -122,6 +128,59 @@ methods: {
                 }
             });
         }
+    },
+
+    async cancel() {
+        this.resetAll();
+        this.forklifts = await this.getForklifts();
+    },
+
+    deleteForklift() {
+        if(this.selectedForklift) {
+            const hasRelations = this.malfunctions.some(x => 
+                x.forkliftId === this.selectedForklift.forkliftId);
+
+            if(hasRelations) {
+                alert("У погрузчика имеются зарегистрированные простои – удаление запрещено ");
+                this.closeDeleteModal();
+                return;
+            }
+
+            const index = this.forklifts.indexOf(this.selectedForklift);
+            this.forklifts.splice(index, 1);
+
+            fetch('https://localhost:7139/Forklifts/Delete?forkliftId=' + this.selectedForklift.forkliftId,
+                {
+                  method: 'DELETE'
+                });
+
+            this.selectedForklift = null;
+            this.closeDeleteModal();
+        }
+    },
+
+    openDeleteModal() {
+        this.shallDelete = true;
+    },
+
+    closeDeleteModal() {
+        this.shallDelete = false;
+    },
+
+    resetAll() {
+        this.extraForklift = false;
+        this.forklifts.forEach(x => x.modify = false); 
+        this.extraForklift = false;       
+
+        if(this.selectedForklift) {
+            const id = `${this.selectedForklift.forkliftId} ${this.selectedForklift.number}`;
+            document.getElementById(id).style.setProperty('background-color', 'white');
+        }
+        
+        this.selectedForklift = null;
+    },
+
+    save() {
     }
 },
 
@@ -130,9 +189,11 @@ data() {
             searchNumber:'',
             forklifts:[],
             malfunctions:[],
-            extraRowForForklifts:false,
+            extraForklift:false,
             extraRowForIdle:false,
-            selectedForkliftRow: { forkliftId:null ,rowId:null, modify:false }
+            selectedForklift: null,
+            addedForklift: null,
+            shallDelete: false
         }
     }
 }

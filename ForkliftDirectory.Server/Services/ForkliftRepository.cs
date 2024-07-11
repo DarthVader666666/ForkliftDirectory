@@ -18,9 +18,17 @@ namespace ForkliftDirectory.Server.Services
             throw new NotImplementedException();
         }
 
-        public Task<Forklift?> DeleteAsync(object? id)
+        public async Task<Forklift?> DeleteAsync(object? id)
         {
-            throw new NotImplementedException();
+            var forklift = await GetAsync(id);
+
+            if (forklift != null)
+            {
+                _dbContext.Forklifts.Remove(forklift);
+                await _dbContext.SaveChangesAsync();
+            }
+            
+            return forklift;
         }
 
         public Task<bool> ExistsAsync(Forklift item)

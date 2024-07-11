@@ -37,5 +37,14 @@ namespace ForkliftDirectory.Server.Controllers
 
             return Ok(forklifts);
         }
+
+        [HttpDelete]
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> Delete([FromQuery] int? forkliftId)
+        {
+            var forklifts = await _forkliftRepository.DeleteAsync(forkliftId);
+
+            return Ok(forklifts);
+        }
     }
 }

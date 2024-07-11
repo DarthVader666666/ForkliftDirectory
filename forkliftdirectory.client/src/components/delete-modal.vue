@@ -1,17 +1,26 @@
 <template>
-    <div v-show="false" className="dialog">
-      <h2>Вы уверены?</h2>
+    <div v-show="show" className="dialog">
+      <h2>Удалить погрузчик? Вы уверены?</h2>
       <div className="yes-no-buttons">
-        <button>Да</button>
-        <button>Нет</button>
+        <button @click="deleteForklift">Да</button>
+        <button @click="closeDeleteModal">Нет</button>
       </div>      
     </div>
 </template>
 
 <script>
 export default {
-    
-
+    props: {
+      show: {
+        type:Boolean
+      },
+      deleteForklift: {
+        type:Function
+      },
+      closeDeleteModal: {
+        type:Function
+      }
+    }
 }
 </script>
 
