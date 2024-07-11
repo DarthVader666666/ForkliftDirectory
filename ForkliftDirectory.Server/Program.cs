@@ -48,7 +48,7 @@ using (var scope = app.Services.CreateScope())
 
     if (connectionString == null)
     {
-        await dbContext.SeedDatabase();
+        dbContext.SeedDatabase();
     }
     else
     {
