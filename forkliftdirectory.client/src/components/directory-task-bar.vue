@@ -61,7 +61,7 @@ methods: {
     async findForkliftsByNumber(searchNumber)
     {
         this.forklifts = await fetch(
-            `https://localhost:${this.hostPort}/Forklifts/Find?number=` + searchNumber,
+            `https://localhost:443/Forklifts/Find?number=` + searchNumber,
             {
               method: 'GET',              
               headers: {
@@ -73,7 +73,7 @@ methods: {
 
     getForklifts() {
             return fetch(
-                `https://localhost:${this.hostPort}/Forklifts/GetList/`,
+                `https://localhost:443/Forklifts/GetList/`,
                 {
                   method: 'GET',
                   headers: {
@@ -85,7 +85,7 @@ methods: {
 
     findMalfunctionsByForkliftId() {
             return fetch(
-                `https://localhost:${this.hostPort}/Malfunctions/Find?forkliftId=` + this.selectedForklift.forkliftId,
+                `https://localhost:443/Malfunctions/Find?forkliftId=` + this.selectedForklift.forkliftId,
                 {
                   method: 'GET',
                   headers: {
@@ -149,7 +149,7 @@ methods: {
             const index = this.forklifts.indexOf(this.selectedForklift);
             this.forklifts.splice(index, 1);
 
-            fetch(`https://localhost:${this.hostPort}/Forklifts/Delete?forkliftId=` + this.selectedForklift.forkliftId,
+            fetch(`https://localhost:443/Forklifts/Delete?forkliftId=` + this.selectedForklift.forkliftId,
                 {
                   method: 'DELETE'
                 });
@@ -194,7 +194,7 @@ data() {
             selectedForklift: null,
             addedForklift: null,
             shallDelete: false,
-            hostPort: '443'
+            hostPort: 443
         }
     }
 }
