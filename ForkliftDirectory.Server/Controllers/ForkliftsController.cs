@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ForkliftDirectory.Server.Controllers
 {
-    [EnableCors("AllowClient")]
+    [EnableCors("AllowAll")]
     [ApiController]
     public class ForkliftsController : ControllerBase
     {
