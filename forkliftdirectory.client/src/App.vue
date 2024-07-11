@@ -1,5 +1,6 @@
 <template>
   <header>
+    {{ environment() }}
     <button className="profile-button">Профиль</button>
   </header>
   <main>
@@ -21,6 +22,12 @@
   export default {
     components: {
       Directory
+    },
+    methods :
+    {
+      environment() {
+        return import.meta.env.VITE_ENV;
+      }
     }
   }
 </script>

@@ -53,6 +53,10 @@ props: {
 },
 
 methods: {
+    url() {
+        return import.meta.env.VITE_API_URL;
+    },
+    
     onSearchInput(value) {
         this.resetAll();
         this.searchNumber = value;
@@ -61,7 +65,7 @@ methods: {
     async findForkliftsByNumber(searchNumber)
     {
         this.forklifts = await fetch(
-            `https://localhost:443/Forklifts/Find?number=` + searchNumber,
+            `${this.url()}/Forklifts/Find?number=` + searchNumber,
             {
               method: 'GET',              
               headers: {
@@ -73,7 +77,7 @@ methods: {
 
     getForklifts() {
             return fetch(
-                `https://localhost:443/Forklifts/GetList/`,
+                `${this.url()}/Forklifts/GetList/`,
                 {
                   method: 'GET',
                   headers: {
@@ -85,7 +89,7 @@ methods: {
 
     findMalfunctionsByForkliftId() {
             return fetch(
-                `https://localhost:443/Malfunctions/Find?forkliftId=` + this.selectedForklift.forkliftId,
+                `${this.url()}/Malfunctions/Find?forkliftId=` + this.selectedForklift.forkliftId,
                 {
                   method: 'GET',
                   headers: {
@@ -149,7 +153,7 @@ methods: {
             const index = this.forklifts.indexOf(this.selectedForklift);
             this.forklifts.splice(index, 1);
 
-            fetch(`https://localhost:443/Forklifts/Delete?forkliftId=` + this.selectedForklift.forkliftId,
+            fetch(`${this.url()}/Forklifts/Delete?forkliftId=` + this.selectedForklift.forkliftId,
                 {
                   method: 'DELETE'
                 });
@@ -194,7 +198,6 @@ data() {
             selectedForklift: null,
             addedForklift: null,
             shallDelete: false,
-            hostPort: 443
         }
     }
 }

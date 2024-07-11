@@ -46,7 +46,7 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var dbContext = services.GetRequiredService<ForkliftDirectoryDbContext>();
 
-    if (connectionString == null)
+    if (app.Environment.EnvironmentName == "Production" || connectionString == null)
     {
         dbContext.SeedDatabase();
     }
@@ -61,7 +61,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseCors("AllowAll");
+app.UseCors("AllowClient");
 
 app.UseAuthentication();
 app.UseAuthorization();
