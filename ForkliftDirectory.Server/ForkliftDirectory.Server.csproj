@@ -7,6 +7,7 @@
     <SpaRoot>..\forkliftdirectory.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <UserSecretsId>d0a8c1c7-52bb-4909-96bf-0dbabbe8e5e6</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
