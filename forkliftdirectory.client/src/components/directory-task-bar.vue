@@ -101,8 +101,7 @@ methods: {
 
     addRowForklift() {
         this.forklifts.forEach(x => x.modify = false);
-        this.extraForklift = true;
-        
+        this.extraForklift = true;        
     },
 
     async selectForkliftRow(forklift) {

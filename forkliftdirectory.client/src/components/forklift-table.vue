@@ -101,4 +101,10 @@ export default {
     .forklift-container input {
         max-width:85px;
     }
+    .forklift-container table {
+        width:700px;
+    }
+    .forklift-container table td {
+        height:20px;
+    }
 </style>

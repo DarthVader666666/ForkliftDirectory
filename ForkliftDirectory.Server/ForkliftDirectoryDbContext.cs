@@ -27,10 +27,6 @@ namespace ForkliftDirectory.Server
             modelBuilder.Entity<User>(builder =>
             {
                 builder.HasKey(x => x.UserId);
-
-                builder.HasOne<Forklift>(x => x.Forklift)
-                    .WithOne(f => f.User)
-                    .HasForeignKey<Forklift>(x => x.ForkliftId);
             });
 
         }
