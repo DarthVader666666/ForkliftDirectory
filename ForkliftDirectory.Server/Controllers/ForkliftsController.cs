@@ -30,6 +30,15 @@ namespace ForkliftDirectory.Server.Controllers
         }
 
         [HttpGet]
+        [Route("[controller]/[action]/{forkliftId:int}")]
+        public async Task<IActionResult> Get(int? forkliftId)
+        {
+            var forklift = _mapper.Map<ForkliftIndexModel>(await _forkliftRepository.GetAsync(forkliftId));
+
+            return Ok(forklift);
+        }
+
+        [HttpGet]
         [Route("[controller]/[action]")]
         public async Task<IActionResult> Find([FromQuery]string? number)
         {
@@ -45,6 +54,26 @@ namespace ForkliftDirectory.Server.Controllers
             var forklifts = await _forkliftRepository.DeleteAsync(forkliftId);
 
             return Ok(forklifts);
+        }
+
+        [HttpPost]
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> Insert([FromBody] ForkliftInsertModel forkliftModel)
+        {
+            var forklift = _mapper.Map<Forklift>(forkliftModel);
+            await _forkliftRepository.CreateAsync(forklift);
+
+            return Ok(forklift);
+        }
+
+        [HttpPut]
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> Update([FromBody] ForkliftUpdateModel forkliftModel)
+        {
+            var forklift = _mapper.Map<Forklift>(forkliftModel);
+            await _forkliftRepository.UpdateAsync(forklift);
+
+            return Ok(forklift);
         }
     }
 }

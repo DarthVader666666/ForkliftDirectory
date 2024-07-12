@@ -4,199 +4,102 @@
         <div className="task-bar">
             <label>Номер погрузчика</label>
             <input @input="event => onSearchInput(event.target.value)" type="text"/>
-            <button @click="findForkliftsByNumber(this.searchNumber)">🔍 Искать</button>
-            <a><span>❌</span>Очистить фильтр</a>
+            <button @click="searchForkliftsByNumber(this.searchNumber)">🔍 Искать</button>
+            <a @click="(e) => onClearFilter(e.target.value)"><span>❌</span>Очистить фильтр</a>
             <button>Изменить</button>
         </div>
-        <div className="task-bar">
-            <ButtonsBar 
-                :addRow="addRowForklift" 
-                :modifyRow="modifySelectedForklift"
-                :cancel="cancel"
-                :openDeleteModal="openDeleteModal"
-                >
-            </ButtonsBar>
-        </div>        
-        <div class="tables">
+        <div className="task-bar">            
             <ForkliftTable 
-                :extraRow="extraForklift" 
+                :setMalfunctions="setMalfunctionsForForklift"
+                :malfunctionsForForklift="malfunctionsForForklift"
+                :setForklifts="setForklifts"
                 :forklifts="forklifts"
-                :selectRow="selectForkliftRow"
-                ></ForkliftTable>
-            <Idle :malfunctions="malfunctions"></Idle>
+                :url="url"
+                >
+            </ForkliftTable>
+            <MalfunctionsTable 
+                :malfunctions="malfunctionsForForklift"
+                >
+            </MalfunctionsTable>
         </div>
     </div>
-    <DeletegModal :show="shallDelete" :deleteForklift="deleteForklift" :closeDeleteModal="closeDeleteModal"></DeletegModal>
-    
+
 </template>
 
 <script>
 import ForkliftTable from './forklift-table.vue'
-import ButtonsBar from './buttons-bar.vue'
-import Idle from './idle-table.vue'
-import DeletegModal from './delete-modal.vue'
+import MalfunctionsTable from './malfunctions-table.vue'
 
 export default {
 
 async created() {
-    this.forklifts = await this.getForklifts();
+    this.url = import.meta.env.VITE_API_URL;
+    await this.setForklifts();
 },
 
 components: {
     ForkliftTable,
-    ButtonsBar,
-    Idle,
-    DeletegModal
+    MalfunctionsTable
 },
 
 props: {
 },
 
-methods: {
-    url() {
-        return import.meta.env.VITE_API_URL;
-    },
-    
+methods: {    
     onSearchInput(value) {
-        this.resetAll();
         this.searchNumber = value;
     },
 
-    async findForkliftsByNumber(searchNumber)
+    async searchForkliftsByNumber(searchNumber)
     {
         this.forklifts = await fetch(
-            `${this.url()}/Forklifts/Find?number=` + searchNumber,
+            `${this.url}/Forklifts/Find?number=` + searchNumber,
             {
-              method: 'GET',              
-              headers: {
-                'Content-Type' : 'application/json',
-              }
+              method: 'GET'
             }
           ).then(response => response.json()).then(data => data);
     },
 
-    getForklifts() {
-            return fetch(
-                `${this.url()}/Forklifts/GetList/`,
-                {
-                  method: 'GET',
-                  headers: {
-                    'Content-Type' : 'application/json',
-                  }
-                }
-              ).then(response => response.json()).then(data => data);
-    },
-
-    findMalfunctionsByForkliftId() {
-            return fetch(
-                `${this.url()}/Malfunctions/Find?forkliftId=` + this.selectedForklift.forkliftId,
-                {
-                  method: 'GET',
-                  headers: {
-                    'Content-Type' : 'application/json',
-                  }
-                }
-              ).then(response => response.json()).then(data => data);
-    },
-
-    addRowForklift() {
-        this.forklifts.forEach(x => x.modify = false);
-        this.extraForklift = true;        
-    },
-
-    async selectForkliftRow(forklift) {
-        if(this.selectedForklift && this.selectedForklift.forkliftId && this.selectedForklift.number) {
-            const elementId = `${this.selectedForklift.forkliftId} ${this.selectedForklift.number}`;
-            document.getElementById(elementId).style.setProperty('background-color', 'white');
-        }
-        
-        this.selectedForklift = forklift;
-        const id = `${this.selectedForklift.forkliftId} ${this.selectedForklift.number}`;
-        document.getElementById(id).style.setProperty('background-color', 'lightgray');
-
-        this.malfunctions = await this.findMalfunctionsByForkliftId()
-    },
-
-    modifySelectedForklift() {
-        this.extraForklift = false;
-        const id = this.selectedForklift['forkliftId'];
-
-        if(id) {
-            this.forklifts.forEach(x => {
-                if(Number(x.forkliftId) === Number(id)) {
-                    x.modify = true
-                }
-                else {
-                    x.modify = false
-                }
-            });
-        }
-    },
-
-    async cancel() {
-        this.resetAll();
-        this.forklifts = await this.getForklifts();
-    },
-
-    deleteForklift() {
-        if(this.selectedForklift) {
-            const hasRelations = this.malfunctions.some(x => 
-                x.forkliftId === this.selectedForklift.forkliftId);
-
-            if(hasRelations) {
-                alert("У погрузчика имеются зарегистрированные простои – удаление запрещено ");
-                this.closeDeleteModal();
-                return;
+    async setForklifts() {
+        this.forklifts = await fetch(
+            `${this.url}/Forklifts/GetList/`,
+            {
+              method: 'GET'
             }
-
-            const index = this.forklifts.indexOf(this.selectedForklift);
-            this.forklifts.splice(index, 1);
-
-            fetch(`${this.url()}/Forklifts/Delete?forkliftId=` + this.selectedForklift.forkliftId,
-                {
-                  method: 'DELETE'
-                });
-
-            this.selectedForklift = null;
-            this.closeDeleteModal();
-        }
+          ).then(response => response.json()).then(data => data);
     },
 
-    openDeleteModal() {
-        this.shallDelete = true;
+    getForklift(forklifId) {
+        return fetch(
+            `${this.url}/Forklifts/Get/${forklifId}`,
+            {
+              method: 'GET'
+            }
+          ).then(response => response.json()).then(data => data);
     },
 
-    closeDeleteModal() {
-        this.shallDelete = false;
+    async setMalfunctionsForForklift(forkliftId) {
+        this.malfunctionsForForklift = await fetch(
+            `${this.url}/Malfunctions/Find?forkliftId=` + forkliftId,
+            {
+                method: 'GET'
+            }
+          ).then(response => response.json()).then(data => data);
     },
 
-    resetAll() {
-        this.extraForklift = false;
-        this.forklifts.forEach(x => x.modify = false); 
-        this.extraForklift = false;       
-
-        if(this.selectedForklift) {
-            const id = `${this.selectedForklift.forkliftId} ${this.selectedForklift.number}`;
-            document.getElementById(id).style.setProperty('background-color', 'white');
-        }
-        
-        this.selectedForklift = null;
-    },
-
-    save() {
+    onClearFilter() {
+        window.document.location.reload();
     }
 },
 
 data() {
     return {
             searchNumber:'',
-            forklifts:[],
-            malfunctions:[],
-            extraForklift:false,
+            malfunctionsForForklift:[],            
             extraRowForIdle:false,
-            selectedForklift: null,
             addedForklift: null,
-            shallDelete: false,
+            url:null,
+            forklifts:[]
         }
     }
 }

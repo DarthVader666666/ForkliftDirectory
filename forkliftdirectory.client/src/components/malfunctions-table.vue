@@ -21,7 +21,7 @@
                 </th>
             </thead>
             <tbody>
-                <tr v-for="mal in malfunctions" :key="mal.malfunctionId">
+                <tr v-for="mal in this.malfunctions" :key="mal.malfunctionId">
                     <td>{{mal.malfunctionId}}</td>
                     <td>{{mal.startTime}}</td>
                     <td>{{mal.endTime}}</td>

@@ -13,9 +13,15 @@ namespace ForkliftDirectory.Server.Services
             _dbContext = dbContext;
         }
 
-        public Task<Forklift?> CreateAsync(Forklift item)
+        public async Task<Forklift?> CreateAsync(Forklift forklift)
         {
-            throw new NotImplementedException();
+            if (forklift != null)
+            {
+                await _dbContext.Forklifts.AddAsync(forklift);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return forklift;
         }
 
         public async Task<Forklift?> DeleteAsync(object? id)
@@ -39,7 +45,7 @@ namespace ForkliftDirectory.Server.Services
         public async Task<Forklift?> GetAsync(object? id)
         {
             var forklift = await _dbContext.Forklifts.Include(x => x.User).Include(x => x.Malfunctions)
-                .FirstOrDefaultAsync(x => x.ForkliftId.Equals((string?)id));
+                .FirstOrDefaultAsync(x => x.ForkliftId.Equals((int?)id));
             return forklift;
         }
 
@@ -62,9 +68,15 @@ namespace ForkliftDirectory.Server.Services
             return Task.FromResult<IEnumerable<Forklift?>>(result);
         }
 
-        public Task<Forklift?> UpdateAsync(Forklift item)
+        public async Task<Forklift?> UpdateAsync(Forklift? forklift)
         {
-            throw new NotImplementedException();
+            if (forklift != null)
+            {
+                var result = _dbContext.Forklifts.Update(forklift);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return forklift;
         }
     }
 }

@@ -27,7 +27,7 @@
     {
       environment() {
         return import.meta.env.VITE_ENV;
-      }
+      },
     }
   }
 </script>
