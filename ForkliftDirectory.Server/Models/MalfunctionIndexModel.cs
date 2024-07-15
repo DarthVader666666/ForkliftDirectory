@@ -10,5 +10,6 @@ namespace ForkliftDirectory.Server.Models
         public string? EndTime { get; set; }
         public string? TimeSpan { get; set; }
         public string? Describtion { get; set; }
+        public string? Number {  get; set; }
     }
 }

@@ -88,7 +88,6 @@
 <script>
 import ButtonsBar from './buttons-bar.vue'
 import DeleteModal from './delete-modal.vue'
-import { watch } from 'vue';
 
 export default {
     async created() {
@@ -108,7 +107,7 @@ export default {
         url: {
             type:String
         },
-        malfunctionsForForklift: {
+        malfunctions: {
             type:Array
         },
         forklifts: {
@@ -125,15 +124,6 @@ export default {
             selectedForklift: null,
             shallDelete: false,
         }
-    },
-
-    setup(props) {
-        watch(() => props, () => {
-
-        }
-            
-        );
-        return {};
     },
 
     methods: {
@@ -194,7 +184,7 @@ export default {
                 )
             }
 
-            this.resetAll();
+            this.setForklifts();
         },
 
         getUsers() {
@@ -220,7 +210,7 @@ export default {
 
         async deleteForklift() {
             if(this.selectedForklift) {
-                const hasRelations = this.malfunctionsForForklift.length > 0;
+                const hasRelations = this.malfunctions.items.length > 0;
 
                 if(hasRelations) {
                     alert("У погрузчика имеются зарегистрированные простои – удаление запрещено ");
@@ -236,7 +226,7 @@ export default {
                 this.selectedForklift = null;
                 this.closeDeleteModal();
 
-                this.resetAll();
+                this.setForklifts();
             }
         },
 
@@ -254,11 +244,10 @@ export default {
             // this.selectedForklift = null;
             // this.addedForklift = null;
 
-            window.document.location.reload();
+            //window.document.location.reload();
         },
 
         async cancel() {
-            this.resetAll();
             this.setForklifts();
         },
 

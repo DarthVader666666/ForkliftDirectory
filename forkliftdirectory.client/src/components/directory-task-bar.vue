@@ -11,7 +11,7 @@
         <div className="task-bar">            
             <ForkliftTable 
                 :setMalfunctions="setMalfunctionsForForklift"
-                :malfunctionsForForklift="malfunctionsForForklift"
+                :malfunctions="malfunctionsForForklift"
                 :setForklifts="setForklifts"
                 :forklifts="forklifts"
                 :url="url"
@@ -19,6 +19,7 @@
             </ForkliftTable>
             <MalfunctionsTable 
                 :malfunctions="malfunctionsForForklift"
+                :number="number"
                 >
             </MalfunctionsTable>
         </div>
@@ -85,6 +86,13 @@ methods: {
                 method: 'GET'
             }
           ).then(response => response.json()).then(data => data);
+        
+        this.forklifts.forEach(x => { 
+            if(x.forkliftId === forkliftId) {
+                this.number = x.number;
+                return;
+            }
+        });
     },
 
     onClearFilter() {
@@ -94,12 +102,13 @@ methods: {
 
 data() {
     return {
-            searchNumber:'',
-            malfunctionsForForklift:[],            
-            extraRowForIdle:false,
+            searchNumber: '',
+            malfunctionsForForklift: [],            
+            extraRowForIdle: false,
             addedForklift: null,
-            url:null,
-            forklifts:[]
+            url: null,
+            forklifts: [],
+            number: null
         }
     }
 }

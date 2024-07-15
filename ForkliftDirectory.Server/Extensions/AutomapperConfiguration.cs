@@ -22,6 +22,7 @@ namespace ForkliftDirectory.Server.Extensions
                     autoMapperConfig.CreateMap<ForkliftUpdateModel, Forklift>();
 
                     autoMapperConfig.CreateMap<Malfunction, MalfunctionIndexModel>()
+                        .ForMember(mim => mim.Number, opts => opts.MapFrom(m => m.Forklift.Number))
                         .ForMember(mim => mim.StartTime, opts => opts.MapFrom(m => m.StartTime.ToString()))
                         .ForMember(mim => mim.EndTime, opts => opts.MapFrom(m => m.EndTime.ToString()));
                 });

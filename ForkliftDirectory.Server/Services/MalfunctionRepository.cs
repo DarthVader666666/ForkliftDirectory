@@ -1,5 +1,6 @@
 ﻿using ForkliftDirectory.Server.Entities;
 using ForkliftDirectory.Server.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace ForkliftDirectory.Server.Services
 {
@@ -44,7 +45,7 @@ namespace ForkliftDirectory.Server.Services
                 return Task.FromResult<IEnumerable<Malfunction?>>(Enumerable.Empty<Malfunction?>());
             }
 
-            var malfunctions = _dbContext.Malfunctions.Where(x => x.ForkliftId == (int?)criteria).AsEnumerable();
+            var malfunctions = _dbContext.Malfunctions.Include(x => x.Forklift).Where(x => x.ForkliftId == (int?)criteria).AsEnumerable();
 
             return Task.FromResult<IEnumerable<Malfunction?>>(malfunctions);
         }

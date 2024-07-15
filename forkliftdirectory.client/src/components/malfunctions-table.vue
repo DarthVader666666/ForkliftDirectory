@@ -1,6 +1,6 @@
 <template>
     <div className="idle-container">
-        <label>Простои по погрузчику</label>        
+        <label>Простои по погрузчику</label><span>{{ this.number}}</span>     
         <ButtonsBar></ButtonsBar>
         <table>
             <thead>
@@ -34,19 +34,40 @@
 </template>
 
 <script>
-    import ButtonsBar from './buttons-bar.vue'
+import ButtonsBar from './buttons-bar.vue'
 
-    export default {
-        components: {
-            ButtonsBar
+export default {
+    components: {
+        ButtonsBar
+    },
+
+    props: {
+        malfunctions: {
+            type: Array
         },
-
-        props: {
-            malfunctions: {
-                type: Array
-            }
+        number: {
+            type:String
         }
+    },
+
+    data() {
+        return {
+            selectedMalfunction: null,
+        }
+    },
+
+    methods: {
+        selectMalfunctionRow(malfunction) {
+            if(this.selectedMalfunction) {
+                const elementId = `${this.selectedMalfunction.malfunctionId} ${this.selectedMalfunction.number}`;
+                document.getElementById(elementId).style.setProperty('background-color', 'white');
+            }
+            this.selectedMalfunction = malfunction;
+            const id = `${this.selectedMalfunction.malfunctionId} ${this.selectedMalfunction.number}`;
+            document.getElementById(id).style.setProperty('background-color', 'lightgray');
+        },
     }
+}
 </script>
 
 <style>
@@ -73,5 +94,9 @@
         border: 1px;
         color: #FFF;
         background-color: rgb(189, 21, 21);
+    }
+
+    .idle-container span {
+        margin-left: 10px;
     }
 </style>
