@@ -1,0 +1,16 @@
+* {
+    font-family:'Calibri', Calibri, monospace;
+    font-size: 16px;
+}
+
+h3 {
+    font-size: 30px;
+}
+
+table {
+    text-align: center;
+}
+
+td {
+    height: 20px !important;
+}

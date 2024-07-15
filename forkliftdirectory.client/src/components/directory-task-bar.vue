@@ -3,9 +3,9 @@
         <h3>Справочник погрузчиков</h3>
         <div className="task-bar">
             <label>Номер погрузчика</label>
-            <input @input="event => onSearchInput(event.target.value)" type="text"/>
+            <input @input="event => onSearchInput(event.target.value)" type="search"/>
             <button @click="searchForkliftsByNumber(this.searchNumber)">🔍 Искать</button>
-            <a @click="(e) => onClearFilter(e.target.value)"><span>❌</span>Очистить фильтр</a>
+            <span>❌</span><a @click="(e) => onClearFilter(e.target.value)">Очистить фильтр</a>
             <button>Изменить</button>
         </div>
         <div className="task-bar">            

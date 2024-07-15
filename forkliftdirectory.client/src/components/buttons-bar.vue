@@ -1,14 +1,10 @@
 <template>
     <div className="buttons">
-        <div>
-            <button @click="addRow()">Добавить</button>
-            <button @click="modifyRow()">Изменить</button>
-            <button @click="openDeleteModal()">Удалить</button>
-        </div>
-        <div>
-            <button @click="save()">Сохранить</button>
-            <button @click="cancel()">Отменить</button>
-        </div>
+        <button @click="addRow()">Добавить</button>
+        <button @click="modifyRow()">Изменить</button>
+        <button @click="openDeleteModal()">Удалить</button>
+        <button @click="save()">Сохранить</button>
+        <button @click="cancel()">Отменить</button>
     </div>    
 </template>
 
@@ -52,7 +48,6 @@ data() {
 <style>
     .buttons {
         display: flex;
-        gap:2rem;
         margin: 0.5rem 0;
     }
 </style>

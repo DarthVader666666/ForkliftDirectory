@@ -46,8 +46,8 @@
                     <td v-else>{{forklift.number}}</td>
 
                     <td v-if="forklift.modify">
-                        <input  v-model="modifiedForklift.active" type="checkbox" :value=value /></td>
-                    <td v-else>{{ forklift.active }}</td>
+                        <input v-model="modifiedForklift.active" type="checkbox" :value=value /></td>
+                    <td v-else><span v-if="forklift.active">✔️</span><span v-else>❌</span></td>
 
                     <td>{{ forklift.lastEndTime }}</td>
 
@@ -168,6 +168,8 @@ export default {
         },
 
         async saveForklifts() {
+            console.log(this.modifiedForklift)
+
             if(this.addedForklift) {
                 fetch(`${this.url}/Forklifts/Insert/`,
                     {
@@ -239,7 +241,7 @@ export default {
         },
 
         async resetAll() {
-            // this.setForklifts();
+            this.setForklifts();
             // this.extraRowForForklift = false;
             // this.forklifts.forEach(x => x.modify = false); 
             // this.extraRowForForklift = false;       
@@ -282,8 +284,5 @@ export default {
     }
     .forklift-container table {
         width:700px;
-    }
-    .forklift-container table td {
-        height:20px;
     }
 </style>

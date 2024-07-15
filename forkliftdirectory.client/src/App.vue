@@ -33,14 +33,14 @@
 </script>
 
 <style scoped>
-  header {
-    background-color: rgb(189, 21, 21);
-    height: 60px;
-    width: 100%;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: end;
+header {
+  background-color: rgb(189, 21, 21);
+  height: 60px;
+  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
 }
 
 header button {
