@@ -53,84 +53,65 @@ namespace ForkliftDirectory.Server.Extensions
             return forklifts;
         }
 
-        public static List<Malfunction> GenerateMalfunctions(ForkliftDirectoryDbContext? dbContext)
-        {
+        public static IEnumerable<Malfunction> GenerateMalfunctions(ForkliftDirectoryDbContext? dbContext)
+        {        
             List<Malfunction> malfunctions = new List<Malfunction> {
                 new Malfunction {
                     MalfunctionId = 1,
                     ForkliftId = 1,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 2,
                     ForkliftId = 1,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 3,
                     ForkliftId = 1,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 4,
                     ForkliftId = 2,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 5,
                     ForkliftId = 2,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 6,
                     ForkliftId = 2,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 7,
                     ForkliftId = 2,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 8,
                     ForkliftId = 3,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
                 new Malfunction {
                     MalfunctionId = 9,
                     ForkliftId = 3,
-                    StartTime = new DateTime(2024, 7, 10, 10, 00, 00),
-                    EndTime = new DateTime(2024, 7, 10, 12, 00, 00),
-                    TimeSpan = "2:00:00",
                     Describtion ="сломался"
                 },
             };
 
-            return malfunctions;
+            foreach (var item in malfunctions)
+            {
+                var dates = GetDates();
+                item.StartTime = dates.start;
+                item.EndTime = dates.end;
+                item.TimeSpan = $"{dates.span.Days * 24 + dates.span.Hours}ч {dates.span.Minutes}мин";
+
+                yield return item;
+            }
         }
 
         public static List<User> GenerateUsers(ForkliftDirectoryDbContext? dbContext)
@@ -151,6 +132,20 @@ namespace ForkliftDirectory.Server.Extensions
             };
 
             return users;
+        }
+
+        public static (DateTime start, DateTime end, TimeSpan span) GetDates()
+        {
+            var random = new Random();
+            var days = random.Next(10, 100);
+            var hours = random.Next(1, 24);
+            var minutes = random.Next(1, 60);
+
+            var startDate = DateTime.Now.AddDays(-days).AddHours(-hours).AddMinutes(-minutes);
+            var span = TimeSpan.FromHours(Math.Round(random.NextDouble(), 1) * 48d);
+            var endDate = startDate + span;
+
+            return (startDate, endDate, span);
         }
     }
 }

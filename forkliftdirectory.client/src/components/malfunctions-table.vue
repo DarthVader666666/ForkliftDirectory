@@ -38,7 +38,6 @@
 
 <script>
 import ButtonsBar from './buttons-bar.vue'
-import { watch } from 'vue';
 
 export default {
     components: {
@@ -58,14 +57,6 @@ export default {
         return {
             selectedMalfunction: null,
         }
-    },
-
-    setup(props) {
-        watch(() => props.malfunctions, (oldValue, newValue) => {
-            // if(oldValue != null)
-            //     this.selectedMalfunction = null;
-        });
-        return {};
     },
 
     methods: {

@@ -158,8 +158,6 @@ export default {
         },
 
         async saveForklifts() {
-            console.log(this.modifiedForklift)
-
             if(this.addedForklift) {
                 fetch(`${this.url}/Forklifts/Insert/`,
                     {
@@ -184,7 +182,8 @@ export default {
                 )
             }
 
-            this.setForklifts();
+            //this.setForklifts();
+            window.document.location.reload();
         },
 
         getUsers() {
@@ -226,7 +225,7 @@ export default {
                 this.selectedForklift = null;
                 this.closeDeleteModal();
 
-                this.setForklifts();
+                window.document.location.reload();
             }
         },
 
@@ -249,6 +248,7 @@ export default {
 
         async cancel() {
             this.setForklifts();
+            window.document.location.reload();
         },
 
         openDeleteModal() {
