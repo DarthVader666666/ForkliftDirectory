@@ -1,6 +1,6 @@
 <template>
     <div className="idle-container">
-        <label>Простои по погрузчику</label><span>{{ this.number}}</span>     
+        <label>Простои по погрузчику</label><span>{{ this.number }}</span>     
         <ButtonsBar></ButtonsBar>
         <table>
             <thead>
@@ -21,7 +21,10 @@
                 </th>
             </thead>
             <tbody>
-                <tr v-for="mal in this.malfunctions" :key="mal.malfunctionId">
+                <tr v-for="mal in this.malfunctions" 
+                :id="`${mal.malfunctionId} ${mal.forkliftId}`" 
+                 @click="selectMalfunctionRow(mal)"
+                :key="mal.malfunctionId">
                     <td>{{mal.malfunctionId}}</td>
                     <td>{{mal.startTime}}</td>
                     <td>{{mal.endTime}}</td>
@@ -35,6 +38,7 @@
 
 <script>
 import ButtonsBar from './buttons-bar.vue'
+import { watch } from 'vue';
 
 export default {
     components: {
@@ -56,14 +60,27 @@ export default {
         }
     },
 
+    setup(props) {
+        watch(() => props.malfunctions, (oldValue, newValue) => {
+            // if(oldValue != null)
+            //     this.selectedMalfunction = null;
+        });
+        return {};
+    },
+
     methods: {
         selectMalfunctionRow(malfunction) {
             if(this.selectedMalfunction) {
-                const elementId = `${this.selectedMalfunction.malfunctionId} ${this.selectedMalfunction.number}`;
-                document.getElementById(elementId).style.setProperty('background-color', 'white');
+                const elementId = `${this.selectedMalfunction.malfunctionId} ${this.selectedMalfunction.forkliftId}`;
+                const element = document.getElementById(elementId);
+
+                if(element) {
+                    element.style.setProperty('background-color', 'white');
+                }
             }
+
             this.selectedMalfunction = malfunction;
-            const id = `${this.selectedMalfunction.malfunctionId} ${this.selectedMalfunction.number}`;
+            const id = `${this.selectedMalfunction.malfunctionId} ${this.selectedMalfunction.forkliftId}`;
             document.getElementById(id).style.setProperty('background-color', 'lightgray');
         },
     }
