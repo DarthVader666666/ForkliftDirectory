@@ -1,8 +1,8 @@
 <template>
     <div className="buttons">
-        <button @click="addRow()">Добавить</button>
-        <button @click="modifyRow()">Изменить</button>
-        <button @click="openDeleteModal()">Удалить</button>
+        <button @click="add()">Добавить</button>
+        <button @click="modify()">Изменить</button>
+        <button @click="open()">Удалить</button>
         <button @click="save()">Сохранить</button>
         <button @click="cancel()">Отменить</button>
     </div>    
@@ -18,16 +18,16 @@ components: {
 },
 
 props: {
-    addRow: {
+    add: {
         type:Function
     },
-    modifyRow: {
+    modify: {
         type:Function
     },
     cancel: {
         type:Function
     },
-    openDeleteModal: {
+    open: {
         type:Function
     },
     save: {

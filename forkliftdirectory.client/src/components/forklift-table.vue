@@ -1,11 +1,11 @@
 <template>
     <div className="forklift-container">
         <ButtonsBar 
-                :addRow="addRowForklift" 
-                :modifyRow="modifySelectedForklift"
+                :add="addRowForklift" 
+                :modify="modifySelectedForklift"
                 :save="saveForklifts"
                 :cancel="cancel"
-                :openDeleteModal="openDeleteModal"
+                :open="openDeleteModal"
                 >
         </ButtonsBar>
         <table>
@@ -182,7 +182,7 @@ export default {
                 )
             }
 
-            //this.setForklifts();
+            this.setForklifts();
             window.document.location.reload();
         },
 
@@ -209,7 +209,7 @@ export default {
 
         async deleteForklift() {
             if(this.selectedForklift) {
-                const hasRelations = this.malfunctions.items.length > 0;
+                const hasRelations = this.malfunctions.length > 0;
 
                 if(hasRelations) {
                     alert("У погрузчика имеются зарегистрированные простои – удаление запрещено ");
@@ -225,6 +225,7 @@ export default {
                 this.selectedForklift = null;
                 this.closeDeleteModal();
 
+                this.setForklifts();
                 window.document.location.reload();
             }
         },

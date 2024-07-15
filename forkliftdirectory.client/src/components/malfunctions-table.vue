@@ -1,7 +1,14 @@
 <template>
     <div className="idle-container">
         <label>Простои по погрузчику</label><span>{{ this.number }}</span>     
-        <ButtonsBar></ButtonsBar>
+        <ButtonsBar
+            :add="addRowForklift" 
+            :modify="modifySelectedForklift"
+            :save="saveForklifts"
+            :cancel="closeModal"
+            :open="openDeleteModal"
+            >
+        </ButtonsBar>
         <table>
             <thead>
                 <th>
@@ -34,14 +41,20 @@
             </tbody>
         </table>
     </div>
+    <AddMalfunctionModal 
+        :show="show"
+        :closeModal="closeModal"
+        ></AddMalfunctionModal>
 </template>
 
 <script>
 import ButtonsBar from './buttons-bar.vue'
+import AddMalfunctionModal from './add-malfunction-modal.vue'
 
 export default {
     components: {
-        ButtonsBar
+        ButtonsBar,
+        AddMalfunctionModal
     },
 
     props: {
@@ -56,6 +69,7 @@ export default {
     data() {
         return {
             selectedMalfunction: null,
+            show:false
         }
     },
 
@@ -74,6 +88,10 @@ export default {
             const id = `${this.selectedMalfunction.malfunctionId} ${this.selectedMalfunction.forkliftId}`;
             document.getElementById(id).style.setProperty('background-color', 'lightgray');
         },
+
+        closeModal() {
+            this.show = false;
+        }
     }
 }
 </script>
