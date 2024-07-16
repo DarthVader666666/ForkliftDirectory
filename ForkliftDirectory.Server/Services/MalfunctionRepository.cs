@@ -21,9 +21,13 @@ namespace ForkliftDirectory.Server.Services
             return result.Entity;
         }
 
-        public Task<Malfunction?> DeleteAsync(object? id)
+        public async Task<Malfunction?> DeleteAsync(object? id)
         {
-            throw new NotImplementedException();
+            var malfunction = await GetAsync(id);
+            var result = _dbContext.Remove(malfunction).Entity;
+            await _dbContext.SaveChangesAsync();
+
+            return result;
         }
 
         public Task<bool> ExistsAsync(Malfunction item)
@@ -31,9 +35,10 @@ namespace ForkliftDirectory.Server.Services
             throw new NotImplementedException();
         }
 
-        public Task<Malfunction?> GetAsync(object? id)
+        public async Task<Malfunction?> GetAsync(object? id)
         {
-            throw new NotImplementedException();
+            var malfunction = await _dbContext.Malfunctions.FirstOrDefaultAsync(x => x.MalfunctionId == (int?)id);
+            return malfunction;
         }
 
         public Task<IEnumerable<Malfunction?>> GetListAsync()
@@ -53,9 +58,17 @@ namespace ForkliftDirectory.Server.Services
             return Task.FromResult<IEnumerable<Malfunction?>>(malfunctions);
         }
 
-        public Task<Malfunction?> UpdateAsync(Malfunction item)
+        public async Task<Malfunction?> UpdateAsync(Malfunction item)
         {
-            throw new NotImplementedException();
+            Malfunction? result = null;
+
+            if (item != null)
+            {
+                result = _dbContext.Malfunctions.Update(item).Entity;
+                await _dbContext.SaveChangesAsync();
+            }
+
+            return result;
         }
     }
 }

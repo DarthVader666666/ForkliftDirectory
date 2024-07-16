@@ -22,8 +22,17 @@ namespace ForkliftDirectory.Server.Extensions
 
                     autoMapperConfig.CreateMap<Malfunction, MalfunctionIndexModel>()
                         .ForMember(mim => mim.Number, opts => opts.MapFrom(m => m.Forklift.Number))
-                        .ForMember(mim => mim.StartTime, opts => opts.MapFrom(m => m.StartTime.ToString()))
-                        .ForMember(mim => mim.EndTime, opts => opts.MapFrom(m => m.EndTime.ToString()));
+                        .ForMember(mim => mim.StartTime, opts => opts.MapFrom(m => ((DateTime)m.StartTime).ToString("yyyy-MM-dd HH:mm")))
+                        .ForMember(mim => mim.EndTime, opts => opts.MapFrom(m => ((DateTime)m.EndTime).ToString("yyyy-MM-dd HH:mm")))
+                        .ForMember(mim => mim.TimeSpan, opts => opts.MapFrom(m => ConvertTimeSpanToString(m.EndTime - m.StartTime)));
+
+                    autoMapperConfig.CreateMap<MalfunctionUpdateModel, Malfunction>()
+                        .ForMember(m => m.StartTime, opts => opts.MapFrom(mim => mim.StartTime != null
+                            ? (DateTime?)DateTime.SpecifyKind((DateTime)mim.StartTime!, DateTimeKind.Utc)
+                            : null))
+                        .ForMember(m => m.EndTime, opts => opts.MapFrom(mim => mim.EndTime != null
+                            ? (DateTime?)DateTime.SpecifyKind((DateTime)mim.EndTime!, DateTimeKind.Utc)
+                            : null));
 
                     autoMapperConfig.CreateMap<MalfunctionInsertModel, Malfunction>()
                         .ForMember(m => m.StartTime, opts => opts.MapFrom(mim => DateTime.SpecifyKind((DateTime)mim.StartTime!, DateTimeKind.Utc)))
@@ -47,6 +56,18 @@ namespace ForkliftDirectory.Server.Extensions
             var maxTime = new[] { maxStartTime, maxEndTime }.Max().ToString();
 
             return maxTime;
+        }
+
+        private static string? ConvertTimeSpanToString(TimeSpan? timeSpan)
+        {
+            if (timeSpan == null)
+            {
+                return null;
+            }
+
+            var time = (TimeSpan)timeSpan;
+
+            return $"{time.Days * 24 + time.Hours}ч {time.Minutes}мин";
         }
     }
 }

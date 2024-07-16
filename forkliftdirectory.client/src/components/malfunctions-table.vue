@@ -2,8 +2,10 @@
     <div className="malfunction-container">
         <label>Простои по погрузчику</label><span>{{ this.forkliftNumber }}</span>     
         <ButtonsBar
-            :add="showModal" 
+            :add="showAddModal"
+            :modify="showModifyModal"
             :cancel="closeModal"
+            :open="openDeleteModal"
             >
         </ButtonsBar>
         <table>
@@ -39,21 +41,36 @@
         </table>
     </div>
     <AddMalfunctionModal 
-        :show="show"
+        :show="showAdd"
         :closeModal="closeModal"
-        :newMalfunction="newMalfunction"
+        :malfunction="newMalfunction"
         :addMalfunction="addMalfunction"
-        ></AddMalfunctionModal>
+    ></AddMalfunctionModal>
+    <ModifyMalfunctionModal 
+        :show="showModify"
+        :closeModal="closeModal"
+        :malfunction="selectedMalfunction"
+        :modifyMalfunction="modifyMalfunction"
+    ></ModifyMalfunctionModal>
+    <DeleteMalfunctionModal
+        :show="showDelete"
+        :closeModal="closeDeleteModal"
+        :deleteMalfunction="deleteMalfunction"
+    ></DeleteMalfunctionModal>
 </template>
 
 <script>
 import ButtonsBar from './buttons-bar.vue'
 import AddMalfunctionModal from './add-malfunction-modal.vue'
+import ModifyMalfunctionModal from './modify-malfunction-modal.vue'
+import DeleteMalfunctionModal from './delete-malfunction-modal.vue'
 
 export default {
     components: {
         ButtonsBar,
-        AddMalfunctionModal
+        AddMalfunctionModal,
+        ModifyMalfunctionModal,
+        DeleteMalfunctionModal
     },
 
     props: {
@@ -73,14 +90,22 @@ export default {
 
     data() {
         return {
-            selectedMalfunction: null,
-            show:false,
+            selectedMalfunction:  {
+                malfunctionId:null,
+                forkliftId:null,
+                startTime:null,
+                endTime:null,
+                describtion:null,
+            },
             newMalfunction: {
                 forkliftId:null,
                 startTime:null,
                 endTime:null,
                 describtion:null,
             },
+            showAdd:false,
+            showModify:false,
+            showDelete:false
         }
     },
 
@@ -100,8 +125,8 @@ export default {
             document.getElementById(id).style.setProperty('background-color', 'lightgray');
         },
 
-        async showModal() {
-            this.show = true;
+        async showAddModal() {
+            this.showAdd = true;
 
             this.newMalfunction.startTime = await fetch(`${this.url}/malfunctions/gettime`,
                 {
@@ -109,8 +134,15 @@ export default {
                 }).then(response => response.json()).then(data => data.startTime);
         },
 
+        async showModifyModal() {
+            if(this.selectedMalfunction.malfunctionId) {
+                this.showModify = true;
+            }
+        },
+
         closeModal() {
-            this.show = false;
+            this.showAdd = false;
+            this.showModify = false;
         },
 
         async addMalfunction(startTime, endTime, describtion) {
@@ -133,7 +165,53 @@ export default {
                 }
             )
 
+            this.closeModal();
             window.location.reload();
+        },
+
+        async modifyMalfunction(startTime, endTime, describtion) {
+            this.selectedMalfunction.forkliftId = this.forkliftId;
+
+            if(startTime) {
+                this.selectedMalfunction.startTime = startTime;
+            }
+
+            this.selectedMalfunction.endTime = endTime;
+            this.selectedMalfunction.describtion = describtion;
+
+            await fetch(`${this.url}/malfunctions/update`,
+                {
+                    method: 'PUT',
+                    body: JSON.stringify(this.selectedMalfunction),
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    }
+                }
+            )
+
+            this.closeModal();
+            window.location.reload();
+        },
+
+        async deleteMalfunction() {
+            await fetch(`${this.url}/malfunctions/delete/${this.selectedMalfunction.malfunctionId}`,
+                {
+                    method: 'DELETE'
+                }
+            );
+
+            this.closeModal();
+            window.location.reload();
+        },
+
+        openDeleteModal() {
+            if(this.selectedMalfunction.malfunctionId) {
+                this.showDelete = true;
+            }            
+        },
+
+        closeDeleteModal() {
+            this.showDelete = false;
         }
     }
 }

@@ -87,7 +87,7 @@
 
 <script>
 import ButtonsBar from './buttons-bar.vue'
-import DeleteModal from './delete-modal.vue'
+import DeleteModal from './delete-forklift-modal.vue'
 
 export default {
     async created() {
@@ -159,7 +159,7 @@ export default {
 
         async saveForklifts() {
             if(this.addedForklift) {
-                fetch(`${this.url}/Forklifts/Insert/`,
+                await fetch(`${this.url}/Forklifts/Insert/`,
                     {
                         method: 'POST',
                         body: JSON.stringify(this.addedForklift),
@@ -171,7 +171,7 @@ export default {
             }
 
             if(this.modifiedForklift) {
-                fetch(`${this.url}/Forklifts/Update/`,
+                await fetch(`${this.url}/Forklifts/Update/`,
                     {
                         method: 'PUT',
                         body: JSON.stringify(this.modifiedForklift),
@@ -244,7 +244,7 @@ export default {
             // this.selectedForklift = null;
             // this.addedForklift = null;
 
-            //window.document.location.reload();
+            window.document.location.reload();
         },
 
         async cancel() {
@@ -253,7 +253,9 @@ export default {
         },
 
         openDeleteModal() {
-            this.shallDelete = true;
+            if(this.selectedForklift) {
+                this.shallDelete = true;
+            }            
         },
 
         closeDeleteModal() {

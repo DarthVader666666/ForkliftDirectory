@@ -34,9 +34,20 @@ namespace ForkliftDirectory.Server.Controllers
         [Route("[controller]/[action]")]
         public async Task<IActionResult> Find([FromQuery] int? forkliftId)
         {
-            var malfunctions = _mapper.Map<IEnumerable<MalfunctionIndexModel>>(await _malfunctionRepository.GetListByAsync(forkliftId));
+            var malfunctions = await _malfunctionRepository.GetListByAsync(forkliftId);
+            IEnumerable<MalfunctionIndexModel>? models = null;
 
-            return Ok(malfunctions);
+            try { 
+               models = _mapper.Map<IEnumerable<MalfunctionIndexModel>>(malfunctions);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+
+            return Ok(models);
         }
 
         [HttpPost]
@@ -50,6 +61,17 @@ namespace ForkliftDirectory.Server.Controllers
             return Ok(result);
         }
 
+        [HttpPut]
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> Update([FromBody] MalfunctionUpdateModel malfunctionModel)
+        {
+            var newMalfunction = _mapper.Map<Malfunction>(malfunctionModel);
+
+            var result = await _malfunctionRepository.UpdateAsync(newMalfunction);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         [Route("[controller]/[action]")]
         public IActionResult GetTime()
@@ -57,6 +79,15 @@ namespace ForkliftDirectory.Server.Controllers
             var time = DateTime.UtcNow.AddHours(3).ToString("yyyy-MM-ddTHH:mm");
 
             return Ok(new { startTime = time });
+        }
+
+        [HttpDelete]
+        [Route("[controller]/[action]/{malfunctionId:int}")]
+        public async Task<IActionResult> Delete(int? malfunctionId)
+        {
+            var result = await _malfunctionRepository.DeleteAsync(malfunctionId);
+
+            return Ok(result);
         }
     }
 }

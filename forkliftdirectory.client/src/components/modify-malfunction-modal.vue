@@ -1,6 +1,6 @@
 <template>
     <div v-show="show" className="add-dialog">
-      <h2>Проблемы с погрузчиком? опишите</h2>
+      <h2>Введите новые данные, чтобы изменить информацию по инциденту</h2>
       <hr>
       <div className="date-fields">
         <div>
@@ -9,11 +9,11 @@
         </div>
         <div>
             <label>окончание</label>
-            <input v-model="endTime" type="datetime-local">
+            <input :value="malfunction.endTime" @change="(e) => this.endTime = e.target.value" type="datetime-local">
         </div>
         </div>
         <h2>Описание инцидента</h2>
-        <textarea @change="e => onDescribtionChange(e.target.value)"></textarea>
+        <textarea :value="malfunction.describtion" @change="(e) => onDescribtionChange(e.target.value)"></textarea>
         <div className="dialog-buttons">
             <button @click="save">Сохранить</button>
             <button className="exit-button" @click="closeModal">Выход</button>
@@ -36,22 +36,34 @@ export default {
         malfunction: {
             type:Object
         },
-        addMalfunction: {
+        modifyMalfunction: {
             type:Function
         }
     },
 
     data() {
         return {
-            endTime: null,
             startTime: null,
+            endTime: null,
             describtion: null
         }
     },
 
     methods: {
         save() {
-            this.addMalfunction(this.startTime, this.endTime, this.describtion)
+            if(!this.startTime) {
+                this.startTime = this.malfunction.startTime.replace(' ', 'T');
+            }
+
+            if(!this.endTime) {
+                this.endTime = this.malfunction.endTime.replace(' ', 'T');
+            }
+
+            if(!this.describtion) {
+                this.describtion = this.malfunction.describtion
+            }
+
+            this.modifyMalfunction(this.startTime, this.endTime, this.describtion)
         },
 
         onDescribtionChange(value) {
