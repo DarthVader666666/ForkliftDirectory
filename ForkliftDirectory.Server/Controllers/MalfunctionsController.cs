@@ -4,6 +4,7 @@ using ForkliftDirectory.Server.Interfaces;
 using ForkliftDirectory.Server.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace ForkliftDirectory.Server.Controllers
 {
@@ -36,6 +37,26 @@ namespace ForkliftDirectory.Server.Controllers
             var malfunctions = _mapper.Map<IEnumerable<MalfunctionIndexModel>>(await _malfunctionRepository.GetListByAsync(forkliftId));
 
             return Ok(malfunctions);
+        }
+
+        [HttpPost]
+        [Route("[controller]/[action]")]
+        public async Task<IActionResult> Insert([FromBody] MalfunctionInsertModel malfunctionModel)
+        {
+            var newMalfunction = _mapper.Map<Malfunction>(malfunctionModel);
+
+            var result = await _malfunctionRepository.CreateAsync(newMalfunction);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("[controller]/[action]")]
+        public IActionResult GetTime()
+        {
+            var time = DateTime.UtcNow.AddHours(3).ToString("yyyy-MM-ddTHH:mm");
+
+            return Ok(new { startTime = time });
         }
     }
 }

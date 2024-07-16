@@ -13,9 +13,12 @@ namespace ForkliftDirectory.Server.Services
             _dbContext = dbContext;
         }
 
-        public Task<Malfunction?> CreateAsync(Malfunction item)
+        public async Task<Malfunction?> CreateAsync(Malfunction item)
         {
-            throw new NotImplementedException();
+            var result = await _dbContext.Malfunctions.AddAsync(item);
+            await _dbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
 
         public Task<Malfunction?> DeleteAsync(object? id)

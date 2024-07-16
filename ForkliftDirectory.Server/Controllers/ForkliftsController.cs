@@ -40,9 +40,9 @@ namespace ForkliftDirectory.Server.Controllers
 
         [HttpGet]
         [Route("[controller]/[action]")]
-        public async Task<IActionResult> Find([FromQuery]string? number)
+        public async Task<IActionResult> Find([FromQuery]string? forkliftNumber)
         {
-            var forklifts = _mapper.Map<IEnumerable<ForkliftIndexModel>>(await _forkliftRepository.GetListByAsync(number));
+            var forklifts = _mapper.Map<IEnumerable<ForkliftIndexModel>>(await _forkliftRepository.GetListByAsync(forkliftNumber));
 
             return Ok(forklifts);
         }

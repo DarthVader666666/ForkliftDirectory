@@ -4,7 +4,7 @@
         <div className="task-bar">
             <label>Номер погрузчика</label>
             <input @input="event => onSearchInput(event.target.value)" type="search"/>
-            <button @click="searchForkliftsByNumber(this.searchNumber)">🔍 Искать</button>
+            <button @click="searchForkliftsByNumber()">🔍 Искать</button>
             <span>❌</span><a @click="(e) => onClearFilter(e.target.value)">Очистить фильтр</a>
             <button>Изменить</button>
         </div>
@@ -19,7 +19,9 @@
             </ForkliftTable>
             <MalfunctionsTable 
                 :malfunctions="malfunctionsForForklift"
-                :number="number"
+                :forkliftNumber="forkliftNumber"
+                :forkliftId="forkliftId"
+                :url="url"
                 >
             </MalfunctionsTable>
         </div>
@@ -51,10 +53,10 @@ methods: {
         this.searchNumber = value;
     },
 
-    async searchForkliftsByNumber(searchNumber)
+    async searchForkliftsByNumber()
     {
         this.forklifts = await fetch(
-            `${this.url}/Forklifts/Find?number=` + searchNumber,
+            `${this.url}/Forklifts/Find?forkliftNumber=` + this.searchNumber,
             {
               method: 'GET'
             }
@@ -89,7 +91,8 @@ methods: {
         
         this.forklifts.forEach(x => { 
             if(x.forkliftId === forkliftId) {
-                this.number = x.number;
+                this.forkliftId = forkliftId;
+                this.forkliftNumber = x.number;
                 return;
             }
         });
@@ -102,13 +105,14 @@ methods: {
 
 data() {
     return {
-            searchNumber: '',
+            searchNumber: null,
             malfunctionsForForklift: [],            
             extraRowForIdle: false,
             addedForklift: null,
             url: null,
             forklifts: [],
-            number: null
+            forkliftNumber: null,
+            forkliftId: null
         }
     }
 }

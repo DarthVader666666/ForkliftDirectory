@@ -1,12 +1,9 @@
 <template>
-    <div className="idle-container">
-        <label>Простои по погрузчику</label><span>{{ this.number }}</span>     
+    <div className="malfunction-container">
+        <label>Простои по погрузчику</label><span>{{ this.forkliftNumber }}</span>     
         <ButtonsBar
-            :add="addRowForklift" 
-            :modify="modifySelectedForklift"
-            :save="saveForklifts"
+            :add="showModal" 
             :cancel="closeModal"
-            :open="openDeleteModal"
             >
         </ButtonsBar>
         <table>
@@ -44,6 +41,8 @@
     <AddMalfunctionModal 
         :show="show"
         :closeModal="closeModal"
+        :newMalfunction="newMalfunction"
+        :addMalfunction="addMalfunction"
         ></AddMalfunctionModal>
 </template>
 
@@ -61,7 +60,13 @@ export default {
         malfunctions: {
             type: Array
         },
-        number: {
+        forkliftNumber: {
+            type:String
+        },
+        forkliftId: {
+            type:Number
+        },
+        url: {
             type:String
         }
     },
@@ -69,7 +74,13 @@ export default {
     data() {
         return {
             selectedMalfunction: null,
-            show:false
+            show:false,
+            newMalfunction: {
+                forkliftId:null,
+                startTime:null,
+                endTime:null,
+                describtion:null,
+            },
         }
     },
 
@@ -89,20 +100,52 @@ export default {
             document.getElementById(id).style.setProperty('background-color', 'lightgray');
         },
 
+        async showModal() {
+            this.show = true;
+
+            this.newMalfunction.startTime = await fetch(`${this.url}/malfunctions/gettime`,
+                {
+                    method: 'GET'
+                }).then(response => response.json()).then(data => data.startTime);
+        },
+
         closeModal() {
             this.show = false;
+        },
+
+        async addMalfunction(startTime, endTime, describtion) {
+            this.newMalfunction.forkliftId = this.forkliftId;
+
+            if(startTime) {
+                this.newMalfunction.startTime = startTime;
+            }
+
+            this.newMalfunction.endTime = endTime;
+            this.newMalfunction.describtion = describtion;
+
+            await fetch(`${this.url}/malfunctions/insert`,
+                {
+                    method: 'POST',
+                    body: JSON.stringify(this.newMalfunction),
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    }
+                }
+            )
+
+            window.location.reload();
         }
     }
 }
 </script>
 
 <style>
-    .idle-container {
+    .malfunction-container {
         max-height: 90vh;
         margin-top: 12px;
     }
 
-    .idle-container table {
+    .malfunction-container table {
         height: 70%;
         width:100%;
     }
@@ -112,7 +155,7 @@ export default {
         font-weight: bold;
     }
 
-    .idle-container button {
+    .malfunction-container button {
         min-width: 100px;
         height: 28px;
         margin-left: 10px;
@@ -122,7 +165,7 @@ export default {
         background-color: rgb(189, 21, 21);
     }
 
-    .idle-container span {
+    .malfunction-container span {
         margin-left: 10px;
     }
 </style>

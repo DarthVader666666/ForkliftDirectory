@@ -49,7 +49,7 @@ namespace ForkliftDirectory.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Forklifts");
+                    b.ToTable("Forklifts", (string)null);
                 });
 
             modelBuilder.Entity("ForkliftDirectory.Server.Entities.Malfunction", b =>
@@ -79,7 +79,7 @@ namespace ForkliftDirectory.Server.Migrations
 
                     b.HasIndex("ForkliftId");
 
-                    b.ToTable("Malfunctions");
+                    b.ToTable("Malfunctions", (string)null);
                 });
 
             modelBuilder.Entity("ForkliftDirectory.Server.Entities.User", b =>
@@ -95,7 +95,7 @@ namespace ForkliftDirectory.Server.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ForkliftDirectory.Server.Entities.Forklift", b =>
