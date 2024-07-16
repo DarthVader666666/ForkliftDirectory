@@ -22,6 +22,7 @@
                 :forkliftNumber="forkliftNumber"
                 :forkliftId="forkliftId"
                 :url="url"
+                :setMalfunctionsForForklift="setMalfunctionsForForklift"
                 >
             </MalfunctionsTable>
         </div>

@@ -85,6 +85,9 @@ export default {
         },
         url: {
             type:String
+        },
+        setMalfunctionsForForklift: {
+            type:Function
         }
     },
 
@@ -166,7 +169,8 @@ export default {
             )
 
             this.closeModal();
-            window.location.reload();
+            //window.location.reload();
+            this.setMalfunctionsForForklift(this.forkliftId);
         },
 
         async modifyMalfunction(startTime, endTime, describtion) {
@@ -190,7 +194,8 @@ export default {
             )
 
             this.closeModal();
-            window.location.reload();
+            //window.location.reload();
+            this.setMalfunctionsForForklift(this.forkliftId);
         },
 
         async deleteMalfunction() {
@@ -200,8 +205,9 @@ export default {
                 }
             );
 
-            this.closeModal();
-            window.location.reload();
+            this.closeDeleteModal();
+            //window.location.reload();
+            this.setMalfunctionsForForklift(this.forkliftId);
         },
 
         openDeleteModal() {
