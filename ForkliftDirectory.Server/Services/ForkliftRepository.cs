@@ -15,13 +15,15 @@ namespace ForkliftDirectory.Server.Services
 
         public async Task<Forklift?> CreateAsync(Forklift forklift)
         {
+            Forklift? result = null;
+
             if (forklift != null)
             {
-                await _dbContext.Forklifts.AddAsync(forklift);
+                result = (await _dbContext.Forklifts.AddAsync(forklift)).Entity;
                 await _dbContext.SaveChangesAsync();
             }
 
-            return forklift;
+            return result;
         }
 
         public async Task<Forklift?> DeleteAsync(object? id)

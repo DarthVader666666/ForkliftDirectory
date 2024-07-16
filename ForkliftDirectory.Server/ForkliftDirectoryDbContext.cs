@@ -14,6 +14,8 @@ namespace ForkliftDirectory.Server
         {
             modelBuilder.Entity<Forklift>(builder => {
                 builder.HasKey(x => x.ForkliftId);
+
+                builder.Property(f => f.ForkliftId).HasIdentityOptions(startValue: 4);
             });
 
             modelBuilder.Entity<Malfunction>(builder => {
@@ -22,11 +24,15 @@ namespace ForkliftDirectory.Server
                 builder.HasOne<Forklift>(x => x.Forklift)
                     .WithMany(f => f.Malfunctions)
                     .HasForeignKey(x => x.ForkliftId);
+
+                builder.Property(f => f.MalfunctionId).HasIdentityOptions(startValue: 10);
             });
 
             modelBuilder.Entity<User>(builder =>
             {
                 builder.HasKey(x => x.UserId);
+
+                builder.Property(f => f.UserId).HasIdentityOptions(startValue: 4);
             });
 
         }

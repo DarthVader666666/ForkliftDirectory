@@ -40,7 +40,6 @@ builder.Services.AddScoped<IRepository<Forklift>, ForkliftRepository>();
 builder.Services.AddScoped<IRepository<Malfunction>, MalfunctionRepository>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
 
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -57,7 +56,6 @@ using (var scope = app.Services.CreateScope())
         dbContext.Database.Migrate();
     }
 }
-
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
